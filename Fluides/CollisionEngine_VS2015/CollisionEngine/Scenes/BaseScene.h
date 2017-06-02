@@ -22,7 +22,6 @@ protected:
 		gVars->pRenderer->SetWorldHeight(m_worldHeight);
 		CreateBorderRectangles();
 
-		
 		gVars->pWorld->AddBehavior<CPolygonMoverTool>(nullptr);
 	}
 	

@@ -13,7 +13,7 @@ class CPolygonMoverTool : public CBehavior
 	CPolygonPtr	GetClickedPolygon()
 	{
 		sf::Vector2f pt, n;
-		sf::Vector2f mousePoint = gVars->pRenderer->ScreenToWorldPos(sf::Vector2f(sf::Mouse::getPosition()));
+		sf::Vector2f mousePoint = gVars->pRenderer->ScreenToWorldPos(sf::Vector2f(sf::Mouse::getPosition(*gVars->pSFMLRenderWindow)));
 		CPolygonPtr clickedPoly;
 
 		gVars->pWorld->ForEachPolygon([&](CPolygonPtr poly)
@@ -34,7 +34,7 @@ class CPolygonMoverTool : public CBehavior
 			if (!m_selectedPoly)
 			{
 				m_selectedPoly = GetClickedPolygon();
-				m_prevMousePos = gVars->pRenderer->ScreenToWorldPos(sf::Vector2f(sf::Mouse::getPosition()));
+				m_prevMousePos = gVars->pRenderer->ScreenToWorldPos(sf::Vector2f(sf::Mouse::getPosition(*gVars->pSFMLRenderWindow)));
 				m_translate = sf::Mouse::isButtonPressed(sf::Mouse::Left);
 				m_clickMousePos = m_prevMousePos;
 
@@ -43,7 +43,7 @@ class CPolygonMoverTool : public CBehavior
 			}
 			else
 			{
-				sf::Vector2f mousePoint = gVars->pRenderer->ScreenToWorldPos(sf::Vector2f(sf::Mouse::getPosition()));
+				sf::Vector2f mousePoint = gVars->pRenderer->ScreenToWorldPos(sf::Vector2f(sf::Mouse::getPosition(*gVars->pSFMLRenderWindow)));
 
 				if (m_translate)
 				{

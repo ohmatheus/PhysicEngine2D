@@ -68,10 +68,11 @@ void CRenderer::DrawLine(const sf::Vector2f& from, const sf::Vector2f& to, float
 	glEnd();
 }
 
-sf::Vector2f CRenderer::ScreenToWorldPos(const sf::Vector2f& pos) const
+sf::Vector2f CRenderer::ScreenToWorldPos(sf::Vector2f pos)
 {
 	float width = (float)gVars->pSFMLRenderWindow->getSize().x;
 	float height = (float)gVars->pSFMLRenderWindow->getSize().y;
+	pos.y = height - pos.y;
 
 	return (pos - sf::Vector2f(width, height) * 0.5f) * (m_worldHeight / height);
 }
@@ -87,7 +88,7 @@ sf::Vector2f CRenderer::WorldToScreenPos(const sf::Vector2f& pos) const
 void CRenderer::Init()
 {
 	// Init font
-	m_font = dtx_open_font("font.ttf", 24);
+	m_font = dtx_open_font("font.ttf", 24); // not needed ?
 	dtx_use_font(m_font, 24);
 
 	m_frameTimer.Start();
@@ -163,12 +164,16 @@ void  CRenderer::SetProjectionMatrix()
 
 void  CRenderer::PreRenderFrame()
 {
-	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+	/*glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 
-	SetProjectionMatrix();
 
-	glMatrixMode(GL_MODELVIEW);
+	glMatrixMode(GL_MODELVIEW);*/
+
+	SetProjectionMatrix();
+	gVars->pSFMLRenderWindow->clear(sf::Color(255, 255, 255, 255));
+
+
 	glTranslatef(0.0f, 0.0f, 0.0f); // move camera here
 }
 

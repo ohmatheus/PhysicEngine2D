@@ -23,6 +23,8 @@ private:
 		}
 		m_clicking = clicking;
 #else
+		return;
+
 		float timeBetweenEach = 1 / m_ParticlePerSecond;
 
 
@@ -54,7 +56,7 @@ private:
 
 			if (shouldSpawn > 0)
 			{
-				sf::Vector2f mousePoint = gVars->pRenderer->ScreenToWorldPos(sf::Vector2f(sf::Mouse::getPosition()));
+				sf::Vector2f mousePoint = gVars->pRenderer->ScreenToWorldPos(sf::Vector2f(sf::Mouse::getPosition(*gVars->pSFMLRenderWindow)));
 				CFluidSystem::Get().ContinuousSpawn(mousePoint - m_Min, mousePoint + m_Max, shouldSpawn, m_Speed);
 			}
 		}

@@ -39,7 +39,7 @@ public:
 	void	DisplayTextWorld(const std::string& text, const sf::Vector2f& worldPos);
 	void	DrawLine(const sf::Vector2f& from, const sf::Vector2f& to, float r, float g, float b);
 
-	sf::Vector2f	ScreenToWorldPos(const sf::Vector2f& pos) const;
+	sf::Vector2f	ScreenToWorldPos(sf::Vector2f pos);
 	sf::Vector2f	WorldToScreenPos(const sf::Vector2f& pos) const;
 
 	void	Init();

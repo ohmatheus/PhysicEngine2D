@@ -40,7 +40,6 @@ void RunApplication()
 		gVars->pRenderer->Update();
 		//SDL_GL_SwapWindow(window);
 
-		gVars->pSFMLRenderWindow->clear(sf::Color(255, 255, 255, 255));
 		//window.draw(shape);
 		gVars->pSFMLRenderWindow->display();
 	}
