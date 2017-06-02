@@ -51,15 +51,15 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>SFML_STATIC;WIN32;_DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)\Libs\SDL2-2.0.3\include;$(SolutionDir)\Libs\libdrawtext-0.2.1\src;$(SolutionDir)\Libs\glew\include;$(SolutionDir)\CollisionEngine;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\Libs\SDL2-2.0.3\include;$(SolutionDir)\Libs\libdrawtext-0.2.1\src;$(SolutionDir)\Libs\glew\include;$(SolutionDir)\CollisionEngine;$(SolutionDir)\Libs\SFML-2.4.2\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)\Libs\libdrawtext-0.2.1\Debug;$(SolutionDir)\Libs\SDL2-2.0.3\lib\x86;$(SolutionDir)\Libs\glut;$(SolutionDir)\Libs\glew\lib\Release\Win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>libdrawtext.lib;SDL2.lib;SDL2main.lib;glew32.lib;glu32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)\Libs\libdrawtext-0.2.1\Debug;$(SolutionDir)\Libs\SDL2-2.0.3\lib\x86;$(SolutionDir)\Libs\glut;$(SolutionDir)\Libs\glew\lib\Release\Win32;$(SolutionDir)\Libs\SFML-2.4.2\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>libdrawtext.lib;SDL2.lib;SDL2main.lib;glew32.lib;glu32.lib;sfml-graphics-s-d.lib;sfml-window-s-d.lib;sfml-system-s-d.lib;freetype.lib;jpeg.lib;opengl32.lib;winmm.lib;gdi32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreAllDefaultLibraries>
       </IgnoreAllDefaultLibraries>
     </Link>
