@@ -17,6 +17,7 @@
 
 #include "FluidSystem.h"
 
+
 CRenderer::CRenderer(float worldHeight)
 	: m_worldHeight(worldHeight), m_lastFPS(0.0f), m_lastFPSSince(0.0f), m_textCursor(0), m_FPS(FPS::Unlocked)
 {}
@@ -30,8 +31,8 @@ void CRenderer::SetWorldHeight(float worldHeight)
 
 float	CRenderer::GetWorldWidth() const
 {
-	int width = gVars->pRenderWindow->GetWidth();
-	int height = gVars->pRenderWindow->Getheight();
+	int width = gVars->pSFMLRenderWindow->getSize().x;
+	int height = gVars->pSFMLRenderWindow->getSize().y;
 	float ratio = (float)width / (float)height;
 	return ratio * m_worldHeight;
 }
@@ -43,7 +44,7 @@ float	CRenderer::GetWorldHeight() const
 
 void CRenderer::DisplayText(const std::string& text)
 {
-	DisplayText(text, 50, gVars->pRenderWindow->Getheight() - 50 - 30 * m_textCursor++);
+	DisplayText(text, 50, gVars->pSFMLRenderWindow->getSize().y - 50 - 30 * m_textCursor++);
 }
 
 void CRenderer::DisplayText(const std::string& text, int x, int y)
@@ -51,14 +52,14 @@ void CRenderer::DisplayText(const std::string& text, int x, int y)
 	m_renderTexts.push_back(SRenderText(text, x, y));
 }
 
-void CRenderer::DisplayTextWorld(const std::string& text, const Vec2& worldPos)
+void CRenderer::DisplayTextWorld(const std::string& text, const sf::Vector2f& worldPos)
 {
-	Vec2 screenPos = WorldToScreenPos(worldPos);
+	sf::Vector2f screenPos = WorldToScreenPos(worldPos);
 	DisplayText(text, (int)screenPos.x, (int)screenPos.y);
 }
 
 
-void CRenderer::DrawLine(const Vec2& from, const Vec2& to, float r, float g, float b)
+void CRenderer::DrawLine(const sf::Vector2f& from, const sf::Vector2f& to, float r, float g, float b)
 {
 	glColor3f(r, g, b);
 	glBegin(GL_LINES);
@@ -67,20 +68,20 @@ void CRenderer::DrawLine(const Vec2& from, const Vec2& to, float r, float g, flo
 	glEnd();
 }
 
-Vec2 CRenderer::ScreenToWorldPos(const Vec2& pos) const
+sf::Vector2f CRenderer::ScreenToWorldPos(const sf::Vector2f& pos) const
 {
-	float width = (float)gVars->pRenderWindow->GetWidth();
-	float height = (float)gVars->pRenderWindow->Getheight();
+	float width = (float)gVars->pSFMLRenderWindow->getSize().x;
+	float height = (float)gVars->pSFMLRenderWindow->getSize().y;
 
-	return (pos - Vec2(width, height) * 0.5f) * (m_worldHeight / height);
+	return (pos - sf::Vector2f(width, height) * 0.5f) * (m_worldHeight / height);
 }
 
-Vec2 CRenderer::WorldToScreenPos(const Vec2& pos) const
+sf::Vector2f CRenderer::WorldToScreenPos(const sf::Vector2f& pos) const
 {
-	float width = (float)gVars->pRenderWindow->GetWidth();
-	float height = (float)gVars->pRenderWindow->Getheight();
+	float width = (float)gVars->pSFMLRenderWindow->getSize().x;
+	float height = (float)gVars->pSFMLRenderWindow->getSize().y;
 
-	return pos * (height / m_worldHeight) + Vec2(width, height) * 0.5f;
+	return pos * (height / m_worldHeight) + sf::Vector2f(width, height) * 0.5f;
 }
 
 void CRenderer::Init()
@@ -109,7 +110,7 @@ void CRenderer::Update()
 {
 	CTimer timer;
 
-	if (gVars->pRenderWindow->JustPressedKey(Key::F4))
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::F4))
 	{
 		gVars->bDebug = !gVars->bDebug;
 	}
@@ -121,12 +122,12 @@ void CRenderer::Update()
 	float frameTime = UpdateFrameTime();
 	DrawFPS(frameTime);
 
-	Vec2 bounds(GetWorldWidth(), GetWorldHeight());
+	sf::Vector2f bounds(GetWorldWidth(), GetWorldHeight());
 
 	CFluidSystem::Get().SetBounds(bounds * -0.5f, bounds * 0.5f);
 	CFluidSystem::Get().Update(frameTime);
 
-	gVars->pPhysicEngine->Step(frameTime);
+	//gVars->pPhysicEngine->Step(frameTime);
 	
 	timer.Start();
 	UpdateWorld(frameTime);
@@ -151,8 +152,8 @@ void CRenderer::Update()
 
 void  CRenderer::SetProjectionMatrix()
 {
-	int width = gVars->pRenderWindow->GetWidth();
-	int height = gVars->pRenderWindow->Getheight();
+	int width = gVars->pSFMLRenderWindow->getSize().x;
+	int height = gVars->pSFMLRenderWindow->getSize().y;
 	float ratio = (float)width / (float)height;
 
 	glMatrixMode(GL_PROJECTION);
@@ -183,8 +184,8 @@ void  CRenderer::DrawFPS(float frameTime)
 		m_lastFPSSince -= frameTime;
 	}
 
-	int width = gVars->pRenderWindow->GetWidth();
-	int height = gVars->pRenderWindow->Getheight();
+	int width = gVars->pSFMLRenderWindow->getSize().x;
+	int height = gVars->pSFMLRenderWindow->getSize().y;
 	DisplayText(std::string("FPS : ") + std::to_string(m_lastFPS), width - 200, height - 30);
 }
 
@@ -212,8 +213,8 @@ void  CRenderer::RenderPolygons()
 
 void  CRenderer::RenderTexts()
 {
-	int width = gVars->pRenderWindow->GetWidth();
-	int height = gVars->pRenderWindow->Getheight();
+	int width = gVars->pSFMLRenderWindow->getSize().x;
+	int height = gVars->pSFMLRenderWindow->getSize().y;
 
 	// Black text
 	glColor3f(0.0f, 0.0f, 0.0f);
@@ -243,7 +244,7 @@ void  CRenderer::RenderTexts()
 
 void  CRenderer::UpdateLockFPS()
 {
-	if (gVars->pRenderWindow->JustPressedKey(Key::F5))
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::F5))
 	{
 		m_FPS = (FPS)(((int)m_FPS + 1) % (int)FPS::Count);
 	}

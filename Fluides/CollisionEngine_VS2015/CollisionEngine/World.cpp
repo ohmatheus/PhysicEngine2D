@@ -38,7 +38,7 @@ CPolygonPtr		CWorld::AddSymetricPolygon(float radius, size_t sides)
 	{
 		float angle = i * dAngle;
 
-		Vec2 point = Vec2(cosf(DEG2RAD(angle)), sinf(DEG2RAD(angle))) * radius;
+		sf::Vector2f point = sf::Vector2f(cosf(DEG2RAD(angle)), sinf(DEG2RAD(angle))) * radius;
 		poly->points.push_back(point);
 	}
 	poly->Build();
@@ -58,7 +58,7 @@ CPolygonPtr		CWorld::AddRandomPoly(const SRandomPolyParams& params)
 		float angle = i * dAngle + Random(-dAngle / 3.0f, dAngle / 3.0f);
 		float dist = radius;
 
-		Vec2 point = Vec2(cosf(DEG2RAD(angle)), sinf(DEG2RAD(angle))) * dist;
+		sf::Vector2f point = sf::Vector2f(cosf(DEG2RAD(angle)), sinf(DEG2RAD(angle))) * dist;
 		poly->points.push_back(point);
 	}
 

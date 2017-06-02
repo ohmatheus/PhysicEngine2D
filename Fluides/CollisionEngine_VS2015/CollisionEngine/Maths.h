@@ -8,6 +8,8 @@
 #define RAD2DEG(x) ((x)*(180.0f/(float)M_PI))
 #define DEG2RAD(x) ((x)*((float)M_PI/180.0f))
 
+#include <SFML\System.hpp>
+
 template<typename T>
 T Select(bool condition, T a, T b)
 {
@@ -145,7 +147,7 @@ struct Vec2
 
 struct Mat2
 {
-	Vec2 X, Y;
+	sf::Vector2f X, Y;
 
 	Mat2() : X(1.0f, 0.0f), Y(0.0f, 1.0f){}
 
@@ -158,7 +160,7 @@ struct Mat2
 
 	float	GetAngle() const
 	{
-		return Vec2(1.0f, 0.0f).Angle(X);
+		return sf::Vector2f(1.0f, 0.0f).Angle(X);
 	}
 
 	void	SetAngle(float angle)
@@ -182,41 +184,39 @@ struct Mat2
 		return Mat2(X.x*rhs.X.x + Y.x*rhs.X.y, X.x*rhs.Y.x + Y.x*rhs.Y.y, X.y*rhs.X.x + Y.y*rhs.X.y, X.y*rhs.Y.x + Y.y*rhs.Y.y);
 	}
 
-	Vec2 operator*(const Vec2& vec) const
+	sf::Vector2f operator*(const sf::Vector2f& vec) const
 	{
-		return Vec2(X.x*vec.x + Y.x*vec.y, X.y*vec.x + Y.y*vec.y);
+		return sf::Vector2f(X.x*vec.x + Y.x*vec.y, X.y*vec.x + Y.y*vec.y);
 	}
 };
 
 struct Line
 {
-	Vec2 point, dir;
+	sf::Vector2f point, dir;
 
 	Line() = default;
-	Line(Vec2 _point, Vec2 _dir) : point(_point), dir(_dir){}
+	Line(sf::Vector2f _point, sf::Vector2f _dir) : point(_point), dir(_dir){}
 
-	Vec2	GetNormal() const
+	sf::Vector2f	GetNormal() const
 	{
-		return dir.GetNormal();
+		return sf::Vector2f(-dir.y, dir.x);
 	}
 
 	// positive value means point above line, negative means point is under line
-	float	GetPointDist(const Vec2& pt) const
+	float	GetPointDist(const sf::Vector2<float>& pt) const
 	{
 		return (pt - point) | GetNormal();
 	}
 
-	Line	Transform(const Mat2& rotation, const Vec2& position) const
+	Line	Transform(const Mat2& rotation, const sf::Vector2f& position) const
 	{
 		return Line(position + rotation * point, rotation * dir);
 	}
 
-	Vec2	Project(const Vec2& pt) const
+	sf::Vector2f	Project(const sf::Vector2f& pt) const
 	{
 		return point + dir * ((pt - point) | dir);
 	}
 };
-
-
 
 #endif

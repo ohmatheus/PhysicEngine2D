@@ -5,7 +5,6 @@
 #include <vector>
 #include <memory>
 
-
 #include "Maths.h"
 
 class CPolygon
@@ -17,9 +16,9 @@ private:
 public:
 	~CPolygon();
 
-	Vec2				position;
-	Mat2				rotation;
-	std::vector<Vec2>	points;
+	sf::Vector2f				position;
+	Mat2						rotation;
+	std::vector<sf::Vector2f>	points;
 
 	void				Build();
 	void				Draw();
@@ -27,17 +26,17 @@ public:
 
 	float				GetArea() const;
 
-	Vec2				TransformPoint(const Vec2& point) const;
-	Vec2				InverseTransformPoint(const Vec2& point) const;
+	sf::Vector2f				TransformPoint(const sf::Vector2f& point) const;
+	sf::Vector2f				InverseTransformPoint(const sf::Vector2f& point) const;
 
 	// if point is outside then returned distance is negative (and doesn't make sense)
-	bool				IsPointInside(const Vec2& point) const;
+	bool				IsPointInside(const sf::Vector2f& point) const;
 
-	bool				CheckCollision(const CPolygon& poly, Vec2& colPoint, Vec2& colNormal, float& colDist) const;
+	bool				CheckCollision(const CPolygon& poly, sf::Vector2f& colPoint, sf::Vector2f& colNormal, float& colDist) const;
 
 	// Physics
 	float				density;
-	Vec2				speed;
+	sf::Vector2f				speed;
 
 private:
 	void				CreateBuffers();

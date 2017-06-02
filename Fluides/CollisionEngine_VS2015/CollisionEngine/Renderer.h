@@ -36,11 +36,11 @@ public:
 
 	void	DisplayText(const std::string& text);
 	void	DisplayText(const std::string& text, int x, int y);
-	void	DisplayTextWorld(const std::string& text, const Vec2& worldPos);
-	void	DrawLine(const Vec2& from, const Vec2& to, float r, float g, float b);
+	void	DisplayTextWorld(const std::string& text, const sf::Vector2f& worldPos);
+	void	DrawLine(const sf::Vector2f& from, const sf::Vector2f& to, float r, float g, float b);
 
-	Vec2	ScreenToWorldPos(const Vec2& pos) const;
-	Vec2	WorldToScreenPos(const Vec2& pos) const;
+	sf::Vector2f	ScreenToWorldPos(const sf::Vector2f& pos) const;
+	sf::Vector2f	WorldToScreenPos(const sf::Vector2f& pos) const;
 
 	void	Init();
 	void	Reset();

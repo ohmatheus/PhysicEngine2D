@@ -14,26 +14,26 @@ CFluidSystem::CFluidSystem()
 	m_minRadius = m_radius * 0.1f;
 }
 
-void	CFluidSystem::SetBounds(const Vec2& min, const Vec2& max)
+void	CFluidSystem::SetBounds(const sf::Vector2f& min, const sf::Vector2f& max)
 {
 	m_min = min;
 	m_max = max;
 }
 
-void	CFluidSystem::SpawnParticule(const Vec2& pos, const Vec2& vel)
+void	CFluidSystem::SpawnParticule(const sf::Vector2f& pos, const sf::Vector2f& vel)
 {
 	m_positions.push_back(pos);
 	m_velocities.push_back(vel);
-	m_accelerations.push_back(Vec2());
+	m_accelerations.push_back(sf::Vector2f());
 	m_densities.push_back(0.0f);
 	m_pressures.push_back(0.0f);
-	m_surfaceNormals.push_back(Vec2());
+	m_surfaceNormals.push_back(sf::Vector2f());
 	m_surfaceCurvatures.push_back(0.0f);
 	m_keys.push_back(0);
 	m_proxies.push_back(SParticleProxy(m_proxies.size()));
 }
 
-void	CFluidSystem::Spawn(const Vec2& min, const Vec2& max, float particulesPerMeter, const Vec2& speed)
+void	CFluidSystem::Spawn(const sf::Vector2f& min, const sf::Vector2f& max, float particulesPerMeter, const sf::Vector2f& speed)
 {
 	float width = max.x - min.x;
 	size_t horiCount = (size_t)(width * particulesPerMeter) + 1;
@@ -57,13 +57,13 @@ void	CFluidSystem::Spawn(const Vec2& min, const Vec2& max, float particulesPerMe
 			float x = min.x + ((float)i) / particulesPerMeter;
 			float y = min.y + ((float)j) / particulesPerMeter;
 
-			SpawnParticule(Vec2(x, y), speed);
+			SpawnParticule(sf::Vector2f(x, y), speed);
 		}
 	}
 }
 
 
-void	CFluidSystem::ContinuousSpawn(const Vec2& min, const Vec2& max, float particulesPerSecond, const Vec2& speed)
+void	CFluidSystem::ContinuousSpawn(const sf::Vector2f& min, const sf::Vector2f& max, float particulesPerSecond, const sf::Vector2f& speed)
 {
 	size_t count = particulesPerSecond;
 
@@ -78,7 +78,7 @@ void	CFluidSystem::ContinuousSpawn(const Vec2& min, const Vec2& max, float parti
 		float x = Random(min.x, max.x);
 		float y = Random(min.y, max.y);
 
-		SpawnParticule(Vec2(x, y), speed);
+		SpawnParticule(sf::Vector2f(x, y), speed);
 	}
 }
 
@@ -105,15 +105,15 @@ void CFluidSystem::Update(float dt)
 
 	BorderCollisions();
 
-	FillMesh();
+	//FillMesh();
 	m_mesh.Draw();
 }
 
 void	CFluidSystem::ResetAccelerations()
 {
-	for (Vec2& acc : m_accelerations)
+	for (sf::Vector2f& acc : m_accelerations)
 	{
-		acc = Vec2();
+		acc = sf::Vector2f();
 	}
 }
 
@@ -125,7 +125,7 @@ void	CFluidSystem::ComputeKeys()
 
 	for (size_t i = 0; i < m_positions.size(); ++i)
 	{
-		Vec2 pos = m_positions[i];
+		sf::Vector2f pos = m_positions[i];
 		int key = (int)floor(pos.y / h) + (((int)floor(pos.x / h)) << shift);
 		m_keys[i] = key;
 	}
@@ -187,8 +187,8 @@ void	CFluidSystem::AddProxyContacts(size_t a)
 
 void	CFluidSystem::AddContact(size_t i, size_t j, float h)
 {
-	const Vec2& iPos = m_positions[i];
-	const Vec2& jPos = m_positions[j];
+	const sf::Vector2f& iPos = m_positions[i];
+	const sf::Vector2f& jPos = m_positions[j];
 
 	float sqrLength = (iPos - jPos).GetSqrLength();
 
@@ -230,8 +230,8 @@ void	CFluidSystem::ComputeDensity()
 
 	for (SParticleContact& contact : m_contacts)
 	{
-		const Vec2& aPos = m_positions[contact.a];
-		const Vec2& bPos = m_positions[contact.b];
+		const sf::Vector2f& aPos = m_positions[contact.a];
+		const sf::Vector2f& bPos = m_positions[contact.b];
 
 		float weight = KernelDefault(contact.length, radius);
 		m_densities[contact.a] += weight;
@@ -259,17 +259,17 @@ void	CFluidSystem::ComputeSurfaceTension()
 
 	for (size_t i = 0; i < m_surfaceNormals.size(); ++i)
 	{
-		m_surfaceNormals[i] = Vec2();
+		m_surfaceNormals[i] = sf::Vector2f();
 		m_surfaceCurvatures[i] = -(mass / m_densities[i]) * KernelDefaultLaplacian(0.0f, radius);
 	}
 
 	for (SParticleContact& contact : m_contacts)
 	{
-		const Vec2& aPos = m_positions[contact.a];
-		const Vec2& bPos = m_positions[contact.b];
+		const sf::Vector2f& aPos = m_positions[contact.a];
+		const sf::Vector2f& bPos = m_positions[contact.b];
 
-		Vec2 r = aPos - bPos;
-		Vec2 gradient = r * KernelDefaultGradientFactor(contact.length, radius);
+		sf::Vector2f r = aPos - bPos;
+		sf::Vector2f gradient = r * KernelDefaultGradientFactor(contact.length, radius);
 
 		m_surfaceNormals[contact.a] += gradient * (mass / m_densities[contact.b]);
 		m_surfaceNormals[contact.b] += gradient * -(mass / m_densities[contact.a]);
@@ -285,7 +285,7 @@ void	CFluidSystem::ComputeSurfaceTension()
 		float nSqrNorm = m_surfaceNormals[i].GetSqrLength();
 		if (nSqrNorm >= l * l)
 		{
-			Vec2 tensionForce = m_surfaceNormals[i].Normalized() * m_surfaceCurvatures[i] * 5.0f;
+			sf::Vector2f tensionForce = m_surfaceNormals[i].Normalized() * m_surfaceCurvatures[i] * 5.0f;
 			
 			m_accelerations[i] += tensionForce / m_densities[i];
 
@@ -296,7 +296,7 @@ void	CFluidSystem::ComputeSurfaceTension()
 
 		m_surfaceNormals[i].Normalize();
 		//gVars->pRenderer->DrawLine(m_positions[i], m_positions[i] + m_surfaceNormals[i] * m_surfaceCurvatures[i], 1, 0, 0);
-		m_surfaceNormals[i] = Vec2();
+		m_surfaceNormals[i] = sf::Vector2f();
 		m_surfaceCurvatures[i] = 0.0f;
 	}
 }
@@ -308,13 +308,13 @@ void	CFluidSystem::AddPressureForces()
 
 	for (SParticleContact& contact : m_contacts)
 	{
-		const Vec2& aPos = m_positions[contact.a];
-		const Vec2& bPos = m_positions[contact.b];
+		const sf::Vector2f& aPos = m_positions[contact.a];
+		const sf::Vector2f& bPos = m_positions[contact.b];
 
-		Vec2 r = aPos - bPos;
+		sf::Vector2f r = aPos - bPos;
 		float length = contact.length;
 
-		Vec2 pressureAcc = r * -mass * ((m_pressures[contact.a] + m_pressures[contact.b]) / (2.0f * m_densities[contact.a] * m_densities[contact.b])) * KernelSpikyGradientFactor(length, radius);
+		sf::Vector2f pressureAcc = r * -mass * ((m_pressures[contact.a] + m_pressures[contact.b]) / (2.0f * m_densities[contact.a] * m_densities[contact.b])) * KernelSpikyGradientFactor(length, radius);
 		pressureAcc += r * 0.02f * mass * ((m_stiffness * (m_densities[contact.a] + m_densities[contact.b])) / (2.0f * m_densities[contact.a] * m_densities[contact.b])) * KernelSpikyGradientFactor(length * 0.8f, radius);
 		m_accelerations[contact.a] += pressureAcc;
 		m_accelerations[contact.b] -= pressureAcc;
@@ -329,11 +329,11 @@ void	CFluidSystem::AddViscosityForces()
 
 	for (SParticleContact& contact : m_contacts)
 	{
-		const Vec2& aPos = m_positions[contact.a];
-		const Vec2& bPos = m_positions[contact.b];
+		const sf::Vector2f& aPos = m_positions[contact.a];
+		const sf::Vector2f& bPos = m_positions[contact.b];
 
-		Vec2 deltaVel = m_velocities[contact.a] - m_velocities[contact.b];
-		Vec2 viscosityAcc = deltaVel * -mass * (viscosity / (2.0f * m_densities[contact.a] * m_densities[contact.b])) * KernelViscosityLaplacian(contact.length, radius);
+		sf::Vector2f deltaVel = m_velocities[contact.a] - m_velocities[contact.b];
+		sf::Vector2f viscosityAcc = deltaVel * -mass * (viscosity / (2.0f * m_densities[contact.a] * m_densities[contact.b])) * KernelViscosityLaplacian(contact.length, radius);
 
 		m_accelerations[contact.a] += viscosityAcc;
 		m_accelerations[contact.b] -= viscosityAcc;
@@ -347,7 +347,7 @@ void	CFluidSystem::BorderCollisions()
 
 	for (size_t i = 0; i < m_positions.size(); ++i)
 	{
-		Vec2& pos = m_positions[i];
+		sf::Vector2f& pos = m_positions[i];
 		if (pos.x <= m_min.x && m_velocities[i].x < 0.0f)
 		{
 			pos.x = m_min.x;
@@ -380,7 +380,7 @@ void	CFluidSystem::ApplyForces(float dt)
 {
 	ClampArray(m_accelerations, m_maxAcceleration);
 
-	Vec2 gravity(0.0f, -5);// -9.8f);
+	sf::Vector2f gravity(0.0f, -5);// -9.8f);
 	for (size_t i = 0; i < m_velocities.size(); ++i)
 	{
 		m_velocities[i] += (m_accelerations[i] + gravity) * dt;
@@ -396,9 +396,9 @@ void	CFluidSystem::Integrate(float dt)
 	}
 }
 
-void	CFluidSystem::ClampArray(std::vector<Vec2>& array, float limit)
+void	CFluidSystem::ClampArray(std::vector<sf::Vector2f>& array, float limit)
 {
-	for (Vec2& vec : array)
+	for (sf::Vector2f& vec : array)
 	{
 		if (vec.GetSqrLength() > limit * limit)
 		{
@@ -411,7 +411,7 @@ void	CFluidSystem::FillMesh()
 {
 	m_mesh.Fill(m_positions.size(), [&](size_t iVertex, float& x, float& y, float& r, float& g, float& b)
 	{
-		const Vec2& pos = m_positions[iVertex];
+		const sf::Vector2f& pos = m_positions[iVertex];
 		x = pos.x;
 		y = pos.y;
 		r = 0.0f;

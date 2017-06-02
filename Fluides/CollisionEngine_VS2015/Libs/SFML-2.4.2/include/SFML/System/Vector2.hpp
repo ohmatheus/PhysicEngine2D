@@ -69,6 +69,16 @@ public:
     template <typename U>
     explicit Vector2(const Vector2<U>& vector);
 
+	// added by me
+	float		GetLength() const;
+	float		GetSqrLength() const;
+	void		Normalize();
+	Vector2<T>	Normalized() const;
+	float		Angle(const Vector2<T>& to);
+	void		Reflect(Vector2<T> normal, float elasticity = 1.0f);
+
+	//
+
     ////////////////////////////////////////////////////////////
     // Member data
     ////////////////////////////////////////////////////////////

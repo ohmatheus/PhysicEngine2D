@@ -23,17 +23,17 @@ class CSphereSimulation : public CBehavior
 {
 private:
 
-	void InitChain(size_t count, const Vec2& start)
+	void InitChain(size_t count, const sf::Vector2f& start)
 	{
 		for (size_t i = 0; i < count; ++i)
 		{
-			m_chain.push_back(AddCircle(start + Vec2(0.0f, -(float)i * DISTANCE)));
+			m_chain.push_back(AddCircle(start + sf::Vector2f(0.0f, -(float)i * DISTANCE)));
 		}
 	}
 
 	void SolveChainConstraints()
 	{
-		//m_chain[0]->speed = Vec2();
+		//m_chain[0]->speed = sf::Vector2f();
 	}
 
 	virtual void Start() override
@@ -42,11 +42,11 @@ private:
 		{
 			for (float y = -22.0f; y < 22.0f; y += 10.0f)
 			{
-				AddCircle(Vec2(x + Random(-0.1f, 0.1f), y + Random(-0.1f, 0.1f)))->speed.x = 50.0f;
+				AddCircle(sf::Vector2f(x + Random(-0.1f, 0.1f), y + Random(-0.1f, 0.1f)))->speed.x = 50.0f;
 			}
 		}
 
-		InitChain(8, Vec2(20.0f, 20.0f));
+		InitChain(8, sf::Vector2f(20.0f, 20.0f));
 
 		gVars->pPhysicEngine->Activate(false);
 	}
@@ -66,8 +66,8 @@ private:
 				CPolygonPtr c1 = m_circles[i];
 				CPolygonPtr c2 = m_circles[j];
 			
-				Vec2 diffPos = c2->position - c1->position;
-				Vec2 diffSpeed = c2->speed - c1->speed;
+				sf::Vector2f diffPos = c2->position - c1->position;
+				sf::Vector2f diffSpeed = c2->speed - c1->speed;
 				if (diffPos.GetSqrLength() < 4.0f * RADIUS * RADIUS && ((diffSpeed | diffPos) < 0.0f))
 				{
 					// Handle collisions here
@@ -106,7 +106,7 @@ private:
 		}
 	}
 
-	CPolygonPtr AddCircle(const Vec2& pos, float radius = RADIUS)
+	CPolygonPtr AddCircle(const sf::Vector2f& pos, float radius = RADIUS)
 	{
 		CPolygonPtr circle = gVars->pWorld->AddSymetricPolygon(radius, 50);
 		circle->density = 0.0f;

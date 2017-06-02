@@ -28,7 +28,7 @@ public:
 		Unlock();
 	}
 
-	void Draw()
+	void Draw() // make it override sfml code
 	{
 		if (m_size == 0)
 		{

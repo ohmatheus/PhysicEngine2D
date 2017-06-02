@@ -24,7 +24,7 @@ protected:
 		SRandomPolyParams params;
 		params.minRadius = 1.0f;
 		params.maxRadius = 1.0f;
-		params.minBounds = Vec2(-width * 0.5f + params.maxRadius * 3.0f, -height * 0.5f + params.maxRadius * 3.0f);
+		params.minBounds = sf::Vector2f(-width * 0.5f + params.maxRadius * 3.0f, -height * 0.5f + params.maxRadius * 3.0f);
 		params.maxBounds = params.minBounds * -1.0f;
 		params.minPoints = 3;
 		params.maxPoints = 8;

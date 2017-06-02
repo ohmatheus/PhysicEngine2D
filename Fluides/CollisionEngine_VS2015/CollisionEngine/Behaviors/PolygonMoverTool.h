@@ -12,8 +12,8 @@ class CPolygonMoverTool : public CBehavior
 {
 	CPolygonPtr	GetClickedPolygon()
 	{
-		Vec2 pt, n;
-		Vec2 mousePoint = gVars->pRenderer->ScreenToWorldPos(gVars->pRenderWindow->GetMousePos());
+		sf::Vector2f pt, n;
+		sf::Vector2f mousePoint = gVars->pRenderer->ScreenToWorldPos(sf::Vector2f(sf::Mouse::getPosition()));
 		CPolygonPtr clickedPoly;
 
 		gVars->pWorld->ForEachPolygon([&](CPolygonPtr poly)
@@ -29,13 +29,13 @@ class CPolygonMoverTool : public CBehavior
 
 	virtual void Update(float frameTime) override
 	{
-		if (gVars->pRenderWindow->GetMouseButton(0) || gVars->pRenderWindow->GetMouseButton(2))
+		if (sf::Mouse::isButtonPressed(sf::Mouse::Left) || sf::Mouse::isButtonPressed(sf::Mouse::Right))
 		{
 			if (!m_selectedPoly)
 			{
 				m_selectedPoly = GetClickedPolygon();
-				m_prevMousePos = gVars->pRenderer->ScreenToWorldPos(gVars->pRenderWindow->GetMousePos());
-				m_translate = gVars->pRenderWindow->GetMouseButton(0);
+				m_prevMousePos = gVars->pRenderer->ScreenToWorldPos(sf::Vector2f(sf::Mouse::getPosition()));
+				m_translate = sf::Mouse::isButtonPressed(sf::Mouse::Left);
 				m_clickMousePos = m_prevMousePos;
 
 				if (m_selectedPoly)
@@ -43,20 +43,20 @@ class CPolygonMoverTool : public CBehavior
 			}
 			else
 			{
-				Vec2 mousePoint = gVars->pRenderer->ScreenToWorldPos(gVars->pRenderWindow->GetMousePos());
+				sf::Vector2f mousePoint = gVars->pRenderer->ScreenToWorldPos(sf::Vector2f(sf::Mouse::getPosition()));
 
 				if (m_translate)
 				{
 					m_selectedPoly->position += mousePoint - m_prevMousePos;
-					m_selectedPoly->speed = Vec2();
+					m_selectedPoly->speed = sf::Vector2f();
 				}
 				else
 				{
-					Vec2 from = m_clickMousePos - m_selectedPoly->position;
-					Vec2 to = mousePoint - m_selectedPoly->position;
+					sf::Vector2f from = m_clickMousePos - m_selectedPoly->position;
+					sf::Vector2f to = mousePoint - m_selectedPoly->position;
 
 					m_selectedPoly->rotation.SetAngle(m_clickAngle + from.Angle(to)); 
-					m_selectedPoly->speed = Vec2();
+					m_selectedPoly->speed = sf::Vector2f();
 				}
 
 				m_prevMousePos = mousePoint;
@@ -69,11 +69,11 @@ class CPolygonMoverTool : public CBehavior
 	}
 
 private:
-	CPolygonPtr	m_selectedPoly;
-	bool		m_translate;
-	Vec2		m_prevMousePos;
-	Vec2		m_clickMousePos;
-	float		m_clickAngle;
+	CPolygonPtr			m_selectedPoly;
+	bool				m_translate;
+	sf::Vector2f		m_prevMousePos;
+	sf::Vector2f		m_clickMousePos;
+	float				m_clickAngle;
 };
 
 #endif

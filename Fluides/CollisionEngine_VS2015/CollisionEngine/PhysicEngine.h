@@ -5,6 +5,7 @@
 #include <unordered_map>
 #include "Maths.h"
 #include "Polygon.h"
+#include <SFML\System.hpp>
 
 class IBroadPhase;
 
@@ -19,14 +20,14 @@ struct SPolygonPair
 struct SCollision
 {
 	SCollision() = default;
-	SCollision(CPolygonPtr _polyA, CPolygonPtr _polyB, Vec2	_point, Vec2 _normal, float _distance)
+	SCollision(CPolygonPtr _polyA, CPolygonPtr _polyB, sf::Vector2f	_point, sf::Vector2f _normal, float _distance)
 		: polyA(_polyA), polyB(_polyB), point(_point), normal(_normal), distance(_distance){}
 
 	CPolygonPtr	polyA, polyB;
 
-	Vec2	point;
-	Vec2	normal;
-	float	distance;
+	sf::Vector2f	point;
+	sf::Vector2f	normal;
+	float			distance;
 };
 
 class CPhysicEngine

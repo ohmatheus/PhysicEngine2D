@@ -34,7 +34,7 @@ int _tmain(int argc, char** argv)
 		}
 
 		window.clear();
-		window.draw(shape);
+		//window.draw(shape);
 		window.display();
 	}*/
 

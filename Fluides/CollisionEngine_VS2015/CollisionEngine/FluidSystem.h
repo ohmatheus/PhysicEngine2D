@@ -4,6 +4,8 @@
 #include "FluidMesh.h"
 #include "Maths.h"
 
+#include <SFML\Graphics.hpp>
+
 #include <vector>
 #include <string>
 
@@ -41,14 +43,14 @@ public:
 private:
 	CFluidSystem();
 	CFluidSystem(const CFluidSystem&);
-	CFluidSystem& operator=(const CFluidSystem&);
+	CFluidSystem& operator=(const CFluidSystem&); // ?
 
 
 public:
-	void	SetBounds(const Vec2& min, const Vec2& max);
-	void	SpawnParticule(const Vec2& pos, const Vec2& vel);
-	void	Spawn(const Vec2& min, const Vec2& max, float particulesPerMeter, const Vec2& speed);
-	void	ContinuousSpawn(const Vec2& min, const Vec2& max, float particulesPerSecond, const Vec2& speed);
+	void	SetBounds(const sf::Vector2f& min, const sf::Vector2f& max);
+	void	SpawnParticule(const sf::Vector2f& pos, const sf::Vector2f& vel);
+	void	Spawn(const sf::Vector2f& min, const sf::Vector2f& max, float particulesPerMeter, const sf::Vector2f& speed);
+	void	ContinuousSpawn(const sf::Vector2f& min, const sf::Vector2f& max, float particulesPerSecond, const sf::Vector2f& speed);
 	void	Update(float dt);
 
 private:
@@ -72,38 +74,37 @@ private:
 	void	ApplyForces(float dt);
 	void	Integrate(float dt);
 
-	void	ClampArray(std::vector<Vec2>& array, float limit);
+	void	ClampArray(std::vector<sf::Vector2f>& array, float limit);
 	void	FillMesh();
 
-	float				m_radius = 0.2f;
-	float				m_minRadius;
-	float				m_restDensity = 0.59f;
-	float				m_stiffness = 500.0f;
-	float				m_particleRadiusRatio = 3.0f;
-	float				m_viscosity = 0.1f;
-	float				m_maxSpeed = 10.0f;
-	float				m_maxAcceleration = 900.0f;
-	float				m_timeScale = 1.0f; // use this to make simulation more stable
-	float				m_wallFriction = 0.4f;
-	float				m_wallRestitution = 0.4f;
+	float							m_radius = 0.2f;
+	float							m_minRadius;
+	float							m_restDensity = 0.59f;
+	float							m_stiffness = 500.0f;
+	float							m_particleRadiusRatio = 3.0f;
+	float							m_viscosity = 0.1f;
+	float							m_maxSpeed = 10.0f;
+	float							m_maxAcceleration = 900.0f;
+	float							m_timeScale = 1.0f; // use this to make simulation more stable
+	float							m_wallFriction = 0.4f;
+	float							m_wallRestitution = 0.4f;
 
-	float				m_mass;
+	float							m_mass;
 
-	std::vector<Vec2>	m_positions;
-	std::vector<Vec2>	m_accelerations;
-	std::vector<Vec2>	m_velocities;
-	std::vector<float>	m_densities;
-	std::vector<float>	m_pressures;
-	std::vector<Vec2>	m_surfaceNormals;
-	std::vector<float>	m_surfaceCurvatures;
-	std::vector<int>	m_keys;
-	std::vector<SParticleProxy>	m_proxies;
-
+	std::vector<sf::Vector2f>		m_positions;
+	std::vector<sf::Vector2f>		m_accelerations;
+	std::vector<sf::Vector2f>		m_velocities;
+	std::vector<float>				m_densities;
+	std::vector<float>				m_pressures;
+	std::vector<sf::Vector2f>		m_surfaceNormals;
+	std::vector<float>				m_surfaceCurvatures;
+	std::vector<int>				m_keys;
+	std::vector<SParticleProxy>		m_proxies;
 
 	std::vector<SParticleContact>	m_contacts;
 
-	Vec2		m_min, m_max;
-	CFluidMesh	m_mesh;
+	sf::Vector2f					m_min, m_max;
+	CFluidMesh						m_mesh;
 };
 
 #endif

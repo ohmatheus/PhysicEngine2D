@@ -18,15 +18,15 @@ private:
 		bool clicking = gVars->pRenderWindow->GetMouseButton(0);
 		if (!m_clicking && clicking)
 		{
-			Vec2 mousePoint = gVars->pRenderer->ScreenToWorldPos(gVars->pRenderWindow->GetMousePos());
-			CFluidSystem::Get().Spawn(mousePoint - Vec2(0.5f, 0.5f), mousePoint + Vec2(0.5f, 0.5f), 10.0f, Vec2(15.0f, 15.0f));
+			sf::Vector2f mousePoint = gVars->pRenderer->ScreenToWorldPos(gVars->pRenderWindow->GetMousePos());
+			CFluidSystem::Get().Spawn(mousePoint - sf::Vector2f(0.5f, 0.5f), mousePoint + sf::Vector2f(0.5f, 0.5f), 10.0f, sf::Vector2f(15.0f, 15.0f));
 		}
 		m_clicking = clicking;
 #else
 		float timeBetweenEach = 1 / m_ParticlePerSecond;
 
 
-		if (gVars->pRenderWindow->GetMouseButton(0))
+		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 		{
 			if (!m_clicking)
 			{
@@ -35,7 +35,7 @@ private:
 			}
 		}
 
-		if (m_clicking && !gVars->pRenderWindow->GetMouseButton(0))
+		if (m_clicking && !sf::Mouse::isButtonPressed(sf::Mouse::Left))
 		{
 			m_clicking = false;
 			m_TimeSinceActive = 0.f;
@@ -54,16 +54,16 @@ private:
 
 			if (shouldSpawn > 0)
 			{
-				Vec2 mousePoint = gVars->pRenderer->ScreenToWorldPos(gVars->pRenderWindow->GetMousePos());
+				sf::Vector2f mousePoint = gVars->pRenderer->ScreenToWorldPos(sf::Vector2f(sf::Mouse::getPosition()));
 				CFluidSystem::Get().ContinuousSpawn(mousePoint - m_Min, mousePoint + m_Max, shouldSpawn, m_Speed);
 			}
 		}
 
 #endif
 	}
-	Vec2	m_Min = Vec2(0.1f, 0.4f);
-	Vec2	m_Max = Vec2(0.0f, 0.4f);
-	Vec2	m_Speed = Vec2(90.0f, -10.0f);
+	sf::Vector2f	m_Min = sf::Vector2f(0.1f, 0.4f);
+	sf::Vector2f	m_Max = sf::Vector2f(0.0f, 0.4f);
+	sf::Vector2f	m_Speed = sf::Vector2f(90.0f, -10.0f);
 
 	bool	m_clicking = false;
 	float	m_ParticlePerSecond = 500.f;

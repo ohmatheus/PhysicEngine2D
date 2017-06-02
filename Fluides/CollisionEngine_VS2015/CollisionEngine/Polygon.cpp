@@ -45,17 +45,17 @@ size_t	CPolygon::GetIndex() const
 	return m_index;
 }
 
-Vec2	CPolygon::TransformPoint(const Vec2& point) const
+sf::Vector2f	CPolygon::TransformPoint(const sf::Vector2f& point) const
 {
 	return position + rotation * point;
 }
 
-Vec2	CPolygon::InverseTransformPoint(const Vec2& point) const
+sf::Vector2f	CPolygon::InverseTransformPoint(const sf::Vector2f& point) const
 {
 	return rotation.GetInverse() * (point - position);
 }
 
-bool	CPolygon::IsPointInside(const Vec2& point) const
+bool	CPolygon::IsPointInside(const sf::Vector2f& point) const
 {
 	float maxDist = -FLT_MAX;
 
@@ -69,7 +69,7 @@ bool	CPolygon::IsPointInside(const Vec2& point) const
 	return maxDist <= 0.0f;
 }
 
-bool	CPolygon::CheckCollision(const CPolygon& poly, Vec2& colPoint, Vec2& colNormal, float& colDist) const
+bool	CPolygon::CheckCollision(const CPolygon& poly, sf::Vector2f& colPoint, sf::Vector2f& colNormal, float& colDist) const
 {
 	return false;
 }
@@ -121,10 +121,10 @@ void CPolygon::BuildLines()
 {
 	for (size_t index = 0; index < points.size(); ++index)
 	{
-		const Vec2& pointA = points[index];
-		const Vec2& pointB = points[(index + 1) % points.size()];
+		const sf::Vector2f& pointA = points[index];
+		const sf::Vector2f& pointB = points[(index + 1) % points.size()];
 
-		Vec2 lineDir = (pointA - pointB).Normalized();
+		sf::Vector2f lineDir = (pointA - pointB).Normalized();
 
 		m_lines.push_back(Line(pointB, lineDir));
 	}

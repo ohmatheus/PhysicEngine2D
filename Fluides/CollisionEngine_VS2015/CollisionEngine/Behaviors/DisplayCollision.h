@@ -23,7 +23,7 @@ private:
 		gVars->pPhysicEngine->Activate(false);
 
 
-		Vec2 point, normal;
+		sf::Vector2f point, normal;
 		float dist;
 		if (polyA->CheckCollision(*polyB, point, normal, dist))
 		{

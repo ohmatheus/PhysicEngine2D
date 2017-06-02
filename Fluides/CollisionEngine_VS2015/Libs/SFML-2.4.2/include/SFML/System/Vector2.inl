@@ -22,6 +22,7 @@
 //
 ////////////////////////////////////////////////////////////
 
+#include "math.h"
 
 ////////////////////////////////////////////////////////////
 template <typename T>
@@ -158,4 +159,66 @@ template <typename T>
 inline bool operator !=(const Vector2<T>& left, const Vector2<T>& right)
 {
     return (left.x != right.x) || (left.y != right.y);
+}
+
+////////////////////////////////////////////////////////////
+template <typename T>
+inline float operator|(const Vector2<T>& left, const Vector2<T>& rhs)
+{
+	return left.x * rhs.x + left.y * rhs.y;
+}
+
+////////////////////////////////////////////////////////////
+template <typename T>
+inline float operator^(const Vector2<T>& left, const Vector2<T>& rhs)
+{
+	return left.x * rhs.y - left.y * rhs.x;
+}
+
+////////////////////////////////////////////////////////////
+template <typename T>
+inline float Vector2<T>::GetLength() const
+{
+	return sqrtf(x*x + y*y);
+}
+
+////////////////////////////////////////////////////////////
+template <typename T>
+inline float Vector2<T>::GetSqrLength() const
+{
+	return x*x + y*y;
+}
+
+////////////////////////////////////////////////////////////
+template <typename T>
+inline void	Vector2<T>::Normalize()
+{
+	float length = GetLength();
+	x /= length;
+	y /= length;
+}
+
+////////////////////////////////////////////////////////////
+template <typename T>
+inline Vector2<T>	Vector2<T>::Normalized() const
+{
+	Vector2<T> res = *this;
+	res.Normalize();
+	return res;
+}
+
+////////////////////////////////////////////////////////////
+template <typename T>
+inline float	Vector2<T>::Angle(const Vector2<T>& to)
+{
+	float cosAngle = Clamp(Normalized() | to.Normalized(), -1.0f, 1.0f);
+	float angle = ((acosf(cosAngle))*180.f/ 3.14159265358979323846) * Sign(*this ^ to);
+	return angle;
+}
+
+////////////////////////////////////////////////////////////
+template <typename T>
+inline void Reflect(Vector2<T> normal, float elasticity/* = 1.0f*/)
+{
+	*this = *this - normal * (1.0f + elasticity) * (*this | normal);
 }

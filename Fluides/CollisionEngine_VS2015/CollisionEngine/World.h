@@ -5,13 +5,14 @@
 
 #include "Polygon.h"
 #include "Behavior.h"
+#include <SFML/System.hpp>
 
 struct SRandomPolyParams
 {
-	size_t	minPoints, maxPoints;
-	float	minRadius, maxRadius;
-	Vec2	minBounds, maxBounds;
-	float	minSpeed, maxSpeed;
+	size_t			minPoints, maxPoints;
+	float			minRadius, maxRadius;
+	sf::Vector2f	minBounds, maxBounds;
+	float			minSpeed, maxSpeed;
 };
 
 class CWorld
